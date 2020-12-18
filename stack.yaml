@@ -44,11 +44,11 @@ Resources:
   ProcessingLambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
-      Action: 'lambda:InvokeFunction'
-      FunctionName: !Ref ProcessingLambdaFunction
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ProcessingLambdaFunction.Arn
       Principal: s3.amazonaws.com
-      SourceArn: !Sub 'arn:aws:s3:::${BucketName}'
-      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !GetAtt S3Bucket.Arn
+      SourceAccount: !Ref 'AWS::AccountId'
 
   ProcessingLambdaExecutionRole:
     Type: AWS::IAM::Role
