@@ -63,6 +63,7 @@ Resources:
       Timeout: 60
   S3Bucket:
     Type: AWS::S3::Bucket
+    DependsOn: ProcessingLambdaPermission
     Properties:
       BucketName: !Ref BucketName
       AccessControl: PublicRead
@@ -71,13 +72,13 @@ Resources:
         ErrorDocument: error.html
       NotificationConfiguration:
         LambdaConfigurations:
-          - Event: s3:ObjectCreated:*
+          - Event: 's3:ObjectCreated:Put'
             Function: !GetAtt ProcessingLambdaFunction.Arn
             Filter:
               S3Key:
                 Rules:
                 - Name: suffix
-                  Value: .txt  
+                  Value: txt  
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -98,6 +99,7 @@ Resources:
 
   ProcessingLambdaPermission:
     Type: AWS::Lambda::Permission
+    DependsOn: ProcessingLambdaFunction
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt ProcessingLambdaFunction.Arn
