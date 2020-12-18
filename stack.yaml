@@ -63,6 +63,8 @@ Resources:
       Timeout: 60
   S3Bucket:
     Type: AWS::S3::Bucket
+    DependsOn:
+      - ProcessingLambdaPermission
     Properties:
       BucketName: !Ref BucketName
       AccessControl: PublicRead
@@ -102,7 +104,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt ProcessingLambdaFunction.Arn
       Principal: s3.amazonaws.com
-      SourceArn: !GetAtt S3Bucket.Arn
+      SourceArn: !Sub 'arn:aws:s3:::${BucketName}'
       SourceAccount: !Ref 'AWS::AccountId'
 
 
