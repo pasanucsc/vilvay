@@ -5,7 +5,7 @@ Parameters:
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
-	DependsOn:
+    DependsOn:
       - ProcessingLambdaPermission
     Properties:
       BucketName: !Ref BucketName
@@ -17,7 +17,7 @@ Resources:
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-	  NotificationConfiguration:
+      NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:*
             Function: !GetAtt ProcessingLambdaFunction.Arn
@@ -34,13 +34,13 @@ Resources:
             Effect: Allow
             Principal: '*'
             Action: 's3:GetObject'
-            Resource: !Join 
+            Resource: !Join
               - ''
               - - 'arn:aws:s3:::'
                 - !Ref S3Bucket
                 - /*
       Bucket: !Ref S3Bucket
-  
+
   ProcessingLambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -78,7 +78,7 @@ Resources:
             - Effect: Allow
               Action:
               - s3:GetObject
-			  - s3.PutObject
+              - s3.PutObject
               - s3:DeleteObject
               Resource:  !Sub 'arn:aws:s3:::${BucketName}/*'
 
@@ -99,10 +99,10 @@ Resources:
             var content = "<!doctype html><html><body>"+filename+"</body></html>";
             var params = { Bucket: bucket, Key: keyName, Body: content, ContentType: 'text/html' };
             s3.putObject(params, function (err, data) {
-              if (err)
-                console.log(err);
-              else
-                console.log("Successfully saved object to " + bucket + "/" + keyName);
+            if (err)
+              console.log(err);
+            else
+              console.log("Successfully saved object to " + bucket + "/" + keyName);
             });
             callback(null, message);
           };
@@ -110,26 +110,18 @@ Resources:
       Role: !GetAtt ProcessingLambdaExecutionRole.Arn
       Runtime: nodejs12.x
       MemorySize: 128
-      Timeout: 60  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+      Timeout: 60
 Outputs:
   WebsiteURL:
-    Value: !GetAtt 
+    Value: !GetAtt
       - S3Bucket
       - WebsiteURL
     Description: URL for website hosted on S3
   S3BucketSecureURL:
-    Value: !Join 
+    Value: !Join
       - ''
       - - 'https://'
-        - !GetAtt 
+        - !GetAtt
           - S3Bucket
           - DomainName
     Description: Name of S3 bucket to hold website content
