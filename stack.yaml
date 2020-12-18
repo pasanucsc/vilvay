@@ -69,9 +69,6 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
-  BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:*
@@ -80,7 +77,10 @@ Resources:
               S3Key:
                 Rules:
                 - Name: suffix
-                  Value: .txt
+                  Value: .txt  
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
       PolicyDocument:
         Id: MyPolicy
         Version: 2012-10-17
