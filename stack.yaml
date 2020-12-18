@@ -63,6 +63,8 @@ Resources:
       Timeout: 60
   S3Bucket:
     Type: AWS::S3::Bucket
+    DependsOn:
+      - ProcessingLambdaFunction
     Properties:
       BucketName: !Ref BucketName
       AccessControl: PublicRead
